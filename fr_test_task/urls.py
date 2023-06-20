@@ -36,7 +36,7 @@ schema_view = get_schema_view(
 api_router = routers.DefaultRouter()
 api_router.register(r'client', views.ClientViewSet, basename='client')
 api_router.register(r'mailing', views.MailingViewSet, basename='mailing')
-api_router.register(r'message', views.MessageViewSet, basename='message')
+# api_router.register(r'message', views.MessageViewSet, basename='message')
 
 
 urlpatterns = [

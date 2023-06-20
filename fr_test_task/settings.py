@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-ej!gv%lqx*rd%@(7st=%mp2_dxq55%7*d9829nc#_n@bp*4x%x
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
 CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND")
 # Application definition

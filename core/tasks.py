@@ -20,16 +20,15 @@ def send_messages(mailing_id):
     try:
         mailing = Mailing.objects.get(id=mailing_id)
 
-        if timezone.now() > mailing.end_datetime:
-            logger.info("Mailing end time has passed. Stopping the send_messages task.")
-            return
-
         clients = Client.objects.filter(
             operator_code=mailing.client_filter_operator_code,
             tag=mailing.client_filter_tag
         )
 
         for client in clients:
+            if timezone.now() > mailing.end_datetime:
+                logger.info("Mailing end time has passed. Stopping the send_messages task.")
+                return
             message = Message.objects.create(
                 creation_datetime=timezone.now(),
                 delivery_status='Sending',

@@ -1,0 +1,55 @@
+version: '2.3'
+services:
+  backend:
+    volumes:
+      - ./:/fr_test_task
+    build:
+      context: .
+    restart: always
+    tty: true
+    env_file:
+      - .env
+    depends_on:
+      - migrate
+    command: ["pipenv", "run", "python", "manage.py", "runserver", "0.0.0.0:8000"]
+#    links:
+#      - db:5432
+    networks:
+      - my-network
+    ports:
+      - "8000:8000"
+
+  migrate:
+    build:
+      context: .
+    env_file:
+      - .env
+    command: pipenv run python manage.py migrate
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - my-network
+
+
+  db:
+    image: kartoza/postgis
+    restart: always
+    environment:
+      - POSTGRES_DB=fr_test_task
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_MULTIPLE_EXTENSIONS=citext,
+      - TZ=Europe/Moscow
+    ports:
+       - "5432:5432"
+    networks:
+      - my-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  my-network:
